@@ -11,16 +11,16 @@ pipeline {
         }
        }
 
-       stage('UPLOAD - TESTPYPI') {
+       stage('UPLOAD') {
         steps {
-           sh 'python3 -m twine upload -u wuhan-stats --repository-url https://test.pypi.org/legacy/ dist/*'
+           sh 'python3 -m twine upload dist/* -u vipervit'
         }
        }
 
-       stage('DEPLOY - TESTPYPI') {
+       stage('DEPLOY') {
         steps {
-            sh 'pip install viperdriver'
-            sh 'source $PROG/python/dev/bin/activate ; pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
+            sh 'pip install --upgrade viperdriver'
+            sh 'pip install --upgrade wuhan-stats'
         }
        }
 
