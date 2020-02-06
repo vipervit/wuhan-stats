@@ -3,17 +3,18 @@ import time
 import logging
 
 import viperdriver
-viperdriver.loggers_set(logging.DEBUG)
 
 from viperdriver import SessionDriver
 
-sleep = 3600
-cases = 0
-deaths = 0
-prev = 0
-diff = 0
+logger = viperdriver.logger # this is enough
 
-sites = { \
+SLEEP = 3600
+SLEEP_MIN = 900
+
+if __debug__:
+    viperdriver.loggers_set(logging.DEBUG)
+
+SITES = { \
     'jh': 'https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6',\
     'wm': 'https://www.worldometers.info/coronavirus/' \
     }
@@ -21,84 +22,94 @@ sites = { \
 def info_collect(sites):
     complete_info = {}
     drv = pom()
-    for site in sites:
-        complete_info.update({site: drv.info_get(sites[site])})
+    for site in SITES:
+        complete_info.update({site: drv.info_get(site, SITES[site])})
+    drv.driver().quit()
     return complete_info
 
-def alert_compose(info):
+def alert_wm(info):
     txt = ''
-    print(info)
-    for site in info:
-        for each in info[site]:
-            txt += each + ' | '
+    info.pop('As of')
+    i_deaths = int(info['Deaths'].replace(',',''))
+    i_cases = int(info['Cases'].replace(',',''))
+    rate = round( i_deaths / i_cases, 4)  * 100
+    info['Deaths'] += '(' + str(rate) + '%)'
+    for i in info:
+        txt += i + ': ' + info[i] + '\n'
+    txt = list(txt)
+    txt = ''.join(txt)
+    txt = txt.replace('As of: ', '')
     return txt
 
-def output(str):
-    print('Alert: ' + str)
-    # os.system('osascript -e \'display notification \"' + str + '\" with title \"Coronavirus Update\"\'')
+def alert_compose(info):
+    for site in info:
+        if site == 'wm':
+            return alert_wm(info[site])
+
+def output(stats, timestamp):
+    if __debug__:
+        logger.debug(stats + '\n' + timestamp)
+    else:
+        cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"Wuhan Virus Update ' + timestamp + '\"\''
+        os.system(cmd)
 
 class pom:
 
     def __init__(self):
         self._drv = SessionDriver()
-        self._url_jh = 'https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6'
-        self._url_wm = 'https://www.worldometers.info/coronavirus/'
-        self._drv.launch()
+        self._drv.launch(not __debug__)
+        self._drv.refresh() # do not remove, required if connected to existing session
 
-    def info_get(self, site):
-        info = []
-        self._drv.get(self.__site__(site))
-        info.append(self._drv.title)
-        return info
+    def __enter__(self):
+        pass
 
-    def info_final(self):
-        return 'works'
+    def driver(self):
+        return self._drv
 
-    def __site__(self, site):
-        assert site is not None, 'Site is not specified'
-        if site == self._url_jh: return self._url_jh
-        if site == self._url_wm: return self._url_wm
-        return None
+    def info_get(self, alias, url):
+        self._drv.get(url)
+        if alias == 'wm':
+            return self.__info_get_wm__()
+        if alias == 'jh':
+            return self.__info_get_jh__()
+
+    def __info_get_wm__(self):
+        elems = self._drv.find_elements_by_xpath('//div[@class=\'maincounter-number\']/span')
+        cases = elems[0].text
+        deaths = elems[1].text
+        last_updated = self._drv.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
+        critical = self._drv.find_elements_by_xpath('//div[@id=\'maincounter-wrap\']/div')[1].text
+        temp = critical.split()
+        critical_abs = temp[2]
+        critical_percent = temp[3]
+        critical = critical_abs + critical_percent
+        return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated.split(': ')[1], }
+
+    def __info_get_jh__(self):
+        return {'TO BE DEVELOPED'}
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        if not __debug__:
+            self._drv.quit()
 
 def main():
 
+    if SLEEP < SLEEP_MIN: # to restrict polling period in order not to abuse the sources
+        logger.info('Polling period may not be less than ' + SLEEP_MIN + ' min.')
+        raise SystemExit
+
+    prev = ''
+
     while True:
-        output(alert_compose(info_collect(sites)))
-        break
-        # output(info_final(info_jh, info_wm))
-        # time.sleep(sleep)
-
-
-def main_old():
-    with SessionDriver() as x:
-
-        while True:
-
-            x.launch()
-            x.get('https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6')
-            x.wait_until(10, "title_is('Coronavirus 2019-nCoV')")
-
-            time.sleep(3)
-
-            txt_cases = x.find_elements_by_class_name("responsive-text-label")[1].text
-            cases = int(txt_cases.replace(',',''))
-            txt_deaths = x.find_elements_by_class_name("responsive-text-label")[3].text
-            deaths = int(txt_deaths.replace(',',''))
-
-            rate = round(deaths/cases,2) * 100
-
-            if cases > prev:
-                if prev != 0:
-                    diff = 100 * round((cases - prev)/cases,2)
-                msg = 'Total: ' + str(cases) + '(+' + str(diff) + '%) \nDeaths: ' + str(deaths) + '\nRate: ' + str(rate) + '%'
-                output(msg)
-
-            prev = cases
-
-            x.quit()
-
-            time.sleep(sleep)
-
+        info = info_collect(SITES)
+        last = info['wm']['As of']
+        if  prev < last:
+            output(alert_compose(info), last)
+        prev = last
+        if __debug__:
+            logger.debug('Exiting due to debug mode.')
+            break
+        time.sleep(SLEEP)
 
 if __name__ == '__main__':
     main()
