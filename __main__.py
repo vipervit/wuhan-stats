@@ -32,7 +32,7 @@ def alert_wm(info):
     info.pop('As of')
     i_deaths = int(info['Deaths'].replace(',',''))
     i_cases = int(info['Cases'].replace(',',''))
-    rate = round( i_deaths / i_cases, 4)  * 100
+    rate = round( i_deaths / i_cases, 2)  * 100
     info['Deaths'] += '(' + str(rate) + '%)'
     for i in info:
         txt += i + ': ' + info[i] + '\n'
@@ -56,9 +56,15 @@ def output(stats, timestamp):
 class pom:
 
     def __init__(self):
+<<<<<<< Updated upstream:corona.py
         self._drv = SessionDriver()
         self._drv.launch(not __debug__)
         self._drv.refresh() # do not remove, required if connected to existing session
+=======
+        super().__init__()
+        self.launch(not __debug__) # will attempt to connect to existing sesssion if debug mode
+        self.refresh() # do not remove, required if connected to existing session
+>>>>>>> Stashed changes:__main__.py
 
     def __enter__(self):
         pass
