@@ -2,3 +2,7 @@
 *.pyc
 *.pyc
 *.pyc
+wuhan_stats.egg-info/PKG-INFO
+wuhan_stats.egg-info/SOURCES.txt
+wuhan_stats.egg-info/top_level.txt
+*.gz
