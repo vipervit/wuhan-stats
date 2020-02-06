@@ -2,5 +2,5 @@ from setuptools import setup, find_packages
 setup(
     name = 'wuhan-stats',
     packages = find_packages(),
-    version='0.103_dev'
+    version='0.104_dev'
 )

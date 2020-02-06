@@ -19,8 +19,8 @@ pipeline {
 
        stage('DEPLOY - TESTPYPI') {
         steps {
-            sh 'pip install viperdriver'
-            sh 'pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
+            sh 'pip install --upgrade viperdriver'
+            sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
 
