@@ -20,7 +20,7 @@ pipeline {
        stage('DEPLOY - TESTPYPI') {
         steps {
             sh 'pip install viperdriver'
-            sh 'source $PROG/python/dev/bin/activate ; pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
+            sh 'pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
 
