@@ -3,7 +3,6 @@ import time
 import logging
 
 import viperdriver
-
 from viperdriver import SessionDriver
 
 logger = viperdriver.logger # this is enough
@@ -24,7 +23,7 @@ def info_collect(sites):
     drv = pom()
     for site in SITES:
         complete_info.update({site: drv.info_get(site, SITES[site])})
-    drv.driver().quit()
+    drv.quit()
     return complete_info
 
 def alert_wm(info):
@@ -53,38 +52,29 @@ def output(stats, timestamp):
         cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"Wuhan Virus Update ' + timestamp + '\"\''
         os.system(cmd)
 
-class pom:
+class pom(SessionDriver):
 
     def __init__(self):
-<<<<<<< Updated upstream:corona.py
-        self._drv = SessionDriver()
-        self._drv.launch(not __debug__)
-        self._drv.refresh() # do not remove, required if connected to existing session
-=======
         super().__init__()
         self.launch(not __debug__) # will attempt to connect to existing sesssion if debug mode
         self.refresh() # do not remove, required if connected to existing session
->>>>>>> Stashed changes:__main__.py
 
     def __enter__(self):
         pass
 
-    def driver(self):
-        return self._drv
-
     def info_get(self, alias, url):
-        self._drv.get(url)
+        self.get(url)
         if alias == 'wm':
             return self.__info_get_wm__()
         if alias == 'jh':
             return self.__info_get_jh__()
 
     def __info_get_wm__(self):
-        elems = self._drv.find_elements_by_xpath('//div[@class=\'maincounter-number\']/span')
+        elems = self.find_elements_by_xpath('//div[@class=\'maincounter-number\']/span')
         cases = elems[0].text
         deaths = elems[1].text
-        last_updated = self._drv.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
-        critical = self._drv.find_elements_by_xpath('//div[@id=\'maincounter-wrap\']/div')[1].text
+        last_updated = self.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
+        critical = self.find_elements_by_xpath('//div[@id=\'maincounter-wrap\']/div')[1].text
         temp = critical.split()
         critical_abs = temp[2]
         critical_percent = temp[3]
@@ -94,9 +84,13 @@ class pom:
     def __info_get_jh__(self):
         return {'TO BE DEVELOPED'}
 
+    def quit(self):
+        if not __debug__:
+            super().quit()
+
     def __exit__(self, exception_type, exception_value, traceback):
         if not __debug__:
-            self._drv.quit()
+            self.quit()
 
 def main():
 
