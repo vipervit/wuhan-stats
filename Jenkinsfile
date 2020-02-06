@@ -13,7 +13,7 @@ pipeline {
 
        stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'python3 -m twine upload -u wuhan-stats --repository-url https://test.pypi.org/legacy/ dist/*'
+           sh 'python3 -m twine upload dist/* --repository-url https://test.pypi.org/legacy/ -u vipervit'
         }
        }
 
