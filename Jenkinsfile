@@ -21,7 +21,6 @@ pipeline {
         steps {
             sh 'pip install --upgrade viperdriver'
             sh 'pip install --upgrade wuhan-stats'
-            sh "kill -9 `ps -ef | grep sleep | awk '{print $2}'` >/dev/null 2>&1"
         }
        }
 
