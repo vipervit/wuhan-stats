@@ -25,6 +25,13 @@ pipeline {
         }
        }
 
+       stage('RESTART') {
+       steps {
+            sh 'wuhan-stop'
+            sh 'wuhan-start'
+        }
+       }
+
     }
 
 }
