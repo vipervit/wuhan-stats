@@ -14,7 +14,7 @@ pipeline {
 
        stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
+           sh 'python3 -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
