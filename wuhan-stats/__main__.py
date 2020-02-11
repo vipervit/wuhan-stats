@@ -56,6 +56,7 @@ class pom(SessionDriver):
 
     def __init__(self):
         super().__init__()
+        # if in debug mode, make sure new session is created first
         self.launch(not __debug__) # will attempt to connect to existing sesssion if debug mode
         self.refresh() # do not remove, required if connected to existing session
 
@@ -75,7 +76,7 @@ class pom(SessionDriver):
         deaths = elems[1].text
         last_updated = self.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
         critical_abs = self.find_elements_by_class_name('number-table')[1].text
-        critical_percent = self.find_elements_by_xpath('//strong')[2].text
+        critical_percent = self.find_elements_by_xpath('//strong')[1].text
         critical = critical_abs + '(' + critical_percent + ')'
         return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated.split(': ')[1], }
 
@@ -97,6 +98,8 @@ def main():
         raise SystemExit
 
     prev = ''
+
+    # init_browser()
 
     while True:
         info = info_collect(SITES)

@@ -13,15 +13,13 @@ pipeline {
 
        stage('UPLOAD') {
         steps {
-           sh 'python3 -m twine upload dist/* -u vipervit'
+           sh 'twine upload --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
        stage('DEPLOY') {
         steps {
-            sh 'pip install --upgrade viperdriver'
-            sh 'pip install --upgrade wuhan-stats'
-            sh '. kill.sh'
+            sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
 
