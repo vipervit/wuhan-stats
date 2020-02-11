@@ -13,13 +13,14 @@ pipeline {
 
        stage('UPLOAD') {
         steps {
-           sh 'twine upload --repository-url https://test.pypi.org/legacy/ dist/*'
+           sh 'twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
        stage('DEPLOY') {
         steps {
-            sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan-stats'
+            sh 'source $prog_python/test/bin/activate'
+            sh 'pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
 
