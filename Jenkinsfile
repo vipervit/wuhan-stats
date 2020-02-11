@@ -13,8 +13,7 @@ pipeline {
 
        stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'source $python_prog/dev/bin/activate'
-           sh 'python -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
+           sh 'twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
