@@ -31,7 +31,7 @@ def alert_wm(info):
     info.pop('As of')
     i_deaths = int(info['Deaths'].replace(',',''))
     i_cases = int(info['Cases'].replace(',',''))
-    rate = round( i_deaths / i_cases, 2)  * 100
+    rate = round( i_deaths / i_cases, 4)  * 100
     info['Deaths'] += '(' + str(rate) + '%)'
     for i in info:
         txt += i + ': ' + info[i] + '\n'
@@ -76,7 +76,7 @@ class pom(SessionDriver):
         deaths = elems[1].text
         last_updated = self.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
         critical_abs = self.find_elements_by_class_name('number-table')[1].text
-        critical_percent = self.find_elements_by_xpath('//strong')[3].text
+        critical_percent = self.find_element_by_xpath('//div[@style=\'float:right; text-align:center\']/strong').text
         critical = critical_abs + '(' + critical_percent + '%)'
         return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated.split(': ')[1], }
 
