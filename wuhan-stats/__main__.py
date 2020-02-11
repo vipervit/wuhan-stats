@@ -76,8 +76,8 @@ class pom(SessionDriver):
         deaths = elems[1].text
         last_updated = self.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
         critical_abs = self.find_elements_by_class_name('number-table')[1].text
-        critical_percent = self.find_elements_by_xpath('//strong')[1].text
-        critical = critical_abs + '(' + critical_percent + ')'
+        critical_percent = self.find_elements_by_xpath('//strong')[3].text
+        critical = critical_abs + '(' + critical_percent + '%)'
         return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated.split(': ')[1], }
 
     def __info_get_jh__(self):
