@@ -6,6 +6,7 @@ pipeline {
 
        stage('BUILD') {
         steps {
+            sh 'source $python_prog/dev/bin/activate'
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
         }
