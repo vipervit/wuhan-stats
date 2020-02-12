@@ -39,7 +39,6 @@ def alert_wm(info):
     txt = list(txt)
     txt = ''.join(txt)
     txt = txt.replace('As of: ', '')
-    txt += 'v' + __version__ 
     return txt
 
 def alert_compose(info):
@@ -51,7 +50,7 @@ def output(stats, timestamp):
     if __debug__:
         logger.debug(stats + '\n' + timestamp)
     else:
-        cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"Wuhan Virus Update ' + timestamp + '\"\''
+        cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"COVD-19 ' + timestamp + ' ' + __version__ + '\"\''
         os.system(cmd)
 
 class pom(SessionDriver):
