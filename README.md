@@ -15,6 +15,6 @@ Do not omit '-O', without it the script runs in debug mode.
 
 Polling period is currently hardcoded to be 1 hour.
 
-Requires viperdriver package.
+Requires selenium, viperdriver & viperlib packages.
 
 More functionality including a Windows version may be added in later versions.

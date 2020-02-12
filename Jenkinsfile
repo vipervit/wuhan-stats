@@ -12,16 +12,23 @@ pipeline {
         }
        }
 
-       stage('UPLOAD') {
+       stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'python3 -m twine upload -u vipervit dist/*'
+           sh 'python3 -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
-       stage('DEPLOY') {
+       stage('DEPLOY - STAGING') {
         steps {
-            sh '. $python_prog/prod/bin/activate'
-            sh 'pip install --upgrade wuhan-stats'
+            sh '. $python_prog/test/bin/activate'
+            sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan-stats -r requirements.txt'
+        }
+       }
+
+       stage('RESTART APPLICATION') {
+       steps {
+            sh '. ~/sh/wuhan/wuhan-stop.sh'
+            sh '. ~/sh/wuhan/wuhan-start.sh'
         }
        }
 
