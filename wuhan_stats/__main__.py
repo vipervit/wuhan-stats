@@ -47,7 +47,7 @@ def alert_compose(info):
             return alert_wm(info[site])
 
 def output(stats, timestamp):
-    header = 'COVD-19 ' + timestamp + ' v' + __version__
+    header = 'COVID-19 ' + timestamp + ' v' + __version__
     cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\''
     if __debug__:
         logger.debug(header + '\n' + stats)
