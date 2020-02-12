@@ -50,7 +50,7 @@ def output(stats, timestamp):
     if __debug__:
         logger.debug(stats + '\n' + timestamp)
     else:
-        cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"COVD-19 ' + timestamp + ' ' + __version__ + '\"\''
+        cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"COVD-19 ' + timestamp + ' v' + __version__ + '\"\''
         os.system(cmd)
 
 class pom(SessionDriver):
