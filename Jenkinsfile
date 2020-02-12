@@ -6,7 +6,7 @@ pipeline {
 
        stage('BUILD') {
         steps {
-            sh '. $$python_prog/dev/bin/activate'
+            sh '. $python_prog/dev/bin/activate'
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
         }
@@ -20,7 +20,7 @@ pipeline {
 
        stage('DEPLOY - STAGING') {
         steps {
-            sh '. $$python_prog/test/bin/activate'
+            sh '. $python_prog/test/bin/activate'
             sh 'pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
