@@ -4,9 +4,15 @@ pipeline {
 
     stages {
 
+      stage('GET SHELL ENV') {
+       steps{
+            sh 'source /etc/profile'
+       }
+      }
+
        stage('BUILD') {
         steps {
-            sh 'source $python_prog/dev/bin/activate'
+            sh 'pdev'
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
         }
