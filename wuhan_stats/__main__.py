@@ -38,7 +38,7 @@ def alert_wm(info):
         txt += i + ': ' + info[i] + '\n'
     txt = list(txt)
     txt = ''.join(txt)
-    txt = txt.replace('As of: ', '')
+    txt += 'v' + __version__
     return txt
 
 def alert_compose(info):
@@ -47,10 +47,11 @@ def alert_compose(info):
             return alert_wm(info[site])
 
 def output(stats, timestamp):
+    header = 'COVD-19 ' + timestamp + ' v' + __version__
+    cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\''
     if __debug__:
-        logger.debug(stats + '\n' + timestamp)
+        logger.debug(header + '\n' + stats)
     else:
-        cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"COVD-19 ' + timestamp + ' v' + __version__ + '\"\''
         os.system(cmd)
 
 class pom(SessionDriver):
@@ -75,7 +76,7 @@ class pom(SessionDriver):
         elems = self.find_elements_by_xpath('//div[@class=\'maincounter-number\']/span')
         cases = elems[0].text
         deaths = elems[1].text
-        last_updated = self.find_elements_by_xpath('//div[@class=\'content-inner\']/div')[1].text
+        last_updated = self.find_element_by_xpath('//div[@style=\'font-size:13px; color:#999; text-align:center\']').text
         critical_abs = self.find_elements_by_class_name('number-table')[1].text
         critical_percent = self.find_element_by_xpath('//div[@style=\'float:right; text-align:center\']/strong').text
         critical = critical_abs + '(' + critical_percent + '%)'
