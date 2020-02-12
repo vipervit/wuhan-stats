@@ -21,14 +21,7 @@ pipeline {
        stage('DEPLOY') {
         steps {
             sh '. $python_prog/prod/bin/activate'
-            sh 'pip install wuhan-stats'
-        }
-       }
-
-       stage('RESTART APPLICATION') {
-       steps {
-            sh '. ~/sh/wuhan/wuhan-stop.sh'
-            sh '. ~/sh/wuhan/wuhan-start.sh'
+            sh 'pip install --upgrade wuhan-stats'
         }
        }
 
