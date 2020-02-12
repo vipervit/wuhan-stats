@@ -6,5 +6,7 @@ setup(
     license='Apache',
     description='Simple desktop alert for Wuhan virus statistics updates',
     packages = find_packages(),
-    version='1.15.05'
+    package_data={'': ['requirements.txt']},
+    include_package_data=True,
+    version='1.15.06'
 )
