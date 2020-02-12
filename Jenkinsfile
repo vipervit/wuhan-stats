@@ -20,7 +20,7 @@ pipeline {
 
        stage('DEPLOY - TESTPYPI') {
         steps {
-            sh 'source $python_prog/test/bin/activate'
+            sh 'ptest'
             sh 'pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
