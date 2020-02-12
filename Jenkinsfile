@@ -4,15 +4,9 @@ pipeline {
 
     stages {
 
-      stage('GET SHELL ENV') {
-       steps{
-            sh 'source /etc/profile'
-       }
-      }
-
        stage('BUILD') {
         steps {
-            sh 'pdev'
+            sh '. $$python_prog/dev/bin/activate'
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
         }
@@ -24,17 +18,17 @@ pipeline {
         }
        }
 
-       stage('DEPLOY - TESTPYPI') {
+       stage('DEPLOY - STAGING') {
         steps {
-            sh 'ptest'
+            sh '. $$python_prog/test/bin/activate'
             sh 'pip install --index-url https://test.pypi.org/simple/ wuhan-stats'
         }
        }
 
-       stage('RESTART') {
+       stage('RESTART APPLICATION') {
        steps {
-            sh 'wuhan-stop'
-            sh 'wuhan-start'
+            sh '. ~/sh/wuhan/wuhan-stop.sh'
+            sh '. ~/sh/wuhan/wuhan-start.sh'
         }
        }
 

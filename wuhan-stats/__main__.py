@@ -31,7 +31,7 @@ def alert_wm(info):
     info.pop('As of')
     i_deaths = int(info['Deaths'].replace(',',''))
     i_cases = int(info['Cases'].replace(',',''))
-    rate = round( i_deaths / i_cases, 4)  * 100
+    rate = round( 100 * i_deaths / i_cases, 2)
     info['Deaths'] += '(' + str(rate) + '%)'
     for i in info:
         txt += i + ': ' + info[i] + '\n'
