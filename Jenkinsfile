@@ -25,13 +25,13 @@ pipeline {
         }
        }
 
-       stage('RESTART APPLICATION') {
+/*       stage('RESTART APPLICATION') {
        steps {
             sh '. ~/sh/wuhan/wuhan-stop.sh'
             sh '. ~/sh/wuhan/wuhan-start.sh'
         }
        }
-
+*/
     }
 
 }

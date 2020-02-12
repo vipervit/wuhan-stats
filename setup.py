@@ -8,5 +8,5 @@ setup(
     packages = find_packages(),
     package_data={'': ['requirements.txt']},
     include_package_data=True,
-    version='1.15.06'
+    version='1.15.07'
 )
