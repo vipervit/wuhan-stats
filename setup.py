@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from wuhan_stats import __version__
 setup(
     name = 'wuhan-stats',
     author='vipervit',
@@ -8,5 +9,5 @@ setup(
     packages = find_packages(),
     package_data={'': ['requirements.txt']},
     include_package_data=True,
-    version='1.15.07'
+    version=__version__
 )

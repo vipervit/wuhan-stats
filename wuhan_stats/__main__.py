@@ -4,6 +4,7 @@ import logging
 
 import viperdriver
 from viperdriver import SessionDriver
+from . import __version__
 
 logger = viperdriver.logger # this is enough
 
@@ -38,6 +39,7 @@ def alert_wm(info):
     txt = list(txt)
     txt = ''.join(txt)
     txt = txt.replace('As of: ', '')
+    txt += 'v' + __version__ 
     return txt
 
 def alert_compose(info):
