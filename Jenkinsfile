@@ -6,7 +6,6 @@ pipeline {
 
        stage('BUILD') {
         steps {
-            sh '. $python_prog/dev/bin/activate'
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
         }
@@ -20,8 +19,7 @@ pipeline {
 
        stage('DEPLOY') {
         steps {
-            sh '. $python_prog/prod/bin/activate'
-            sh 'pip install --upgrade wuhan-stats'
+            sh 'pip install --upgrade wuhan_stats'
         }
        }
 
