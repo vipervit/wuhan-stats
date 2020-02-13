@@ -13,7 +13,7 @@ pipeline {
 
        stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan_stats -r requirements.txt'
+           sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan_stats'
         }
        }
 
