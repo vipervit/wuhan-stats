@@ -19,7 +19,7 @@ pipeline {
 
        stage('DEPLOY') {
         steps {
-            sh 'pip install --upgrade wuhan_stats'
+            sh 'pip install --upgrade wuhan_stats -r requirements.txt'
         }
        }
 
