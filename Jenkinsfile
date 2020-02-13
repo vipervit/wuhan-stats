@@ -17,9 +17,9 @@ pipeline {
         }
        }
 
-       stage('DEPLOY') {
+       stage('DEPLOY - STAGE') {
         steps {
-            sh 'pip install --upgrade wuhan_stats'
+            sh 'pip install --index-url https://test.pypi.org/simple/ wuhan_stats'
         }
        }
 
