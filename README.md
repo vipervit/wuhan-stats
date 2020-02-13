@@ -1,20 +1,19 @@
-# wuhan-stats
-Selenium-based alert for updates of Wuhan virus statistics.
+# wuhan_stats
+Simple alert for updates of Wuhan virus statistics.
 
 Currently for Mac only. Generates alert using Mac Notifications as soon as new statistics are available on https://www.worldometers.info/coronavirus/  
 
 ![Alert sample](snapshot.jpeg)
 
-The very first version.
+To install: 'pip install wuhan_stats'
 
-To install: 'pip install wuhan-stats'
+To run: 'python -m wuhan-stats &'
 
-To run: 'python -O -m wuhan-stats &'
+Polling period is 1 hour. Alert is generated only if there is a new timestamp on the source site in 'Last updated' field.
 
-Do not omit '-O', without it the script runs in debug mode.
+Dependencies:
 
-Polling period is currently hardcoded to be 1 hour.
+requests
+BeautifulSoup
 
-Requires viperdriver package.
-
-More functionality including a Windows version may be added in later versions.
+More functionality including a Windows version is planned to be added in later versions.

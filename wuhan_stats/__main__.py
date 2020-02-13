@@ -2,29 +2,47 @@ import os
 import time
 import logging
 
-import viperdriver
-from viperdriver import SessionDriver
+from bs4 import BeautifulSoup
+import requests
+
 from . import __version__
 
-logger = viperdriver.logger # this is enough
+logger = logging.getLogger(__name__)
 
 SLEEP = 3600
 SLEEP_MIN = 900
 
-if __debug__:
-    viperdriver.loggers_set(logging.DEBUG)
-
 SITES = { \
-    'jh': 'https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6',\
+    # 'jh': 'https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6',\
     'wm': 'https://www.worldometers.info/coronavirus/' \
     }
 
+# ------- Worldometer
+def info_get_wm():
+    r = requests.get(SITES['wm'])
+    soup = BeautifulSoup(r.text, features="html.parser")
+    tmp =soup.title.string.split(' ')
+    cases = tmp[3]
+    deaths = tmp[6]
+    time = soup.text.split('Last updated: ')[1].split('GMT')[0]
+    last_updated = soup.text.split('Last updated: ')[1].split('GMT')[0] + ' GMT'
+    critical = soup.text.split('Serious or Critical')[0].split('Mild Condition')[1].replace(' ', '')
+    return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated }
+
+# ---------- Johns Hopkins CSSE
+def info_get_jh():
+    raise NotImplementedError
+
+def info_get(site):
+    if site == 'wm':
+        return info_get_wm()
+    if site == 'jh':
+        return info_get_jh()
+
 def info_collect(sites):
     complete_info = {}
-    drv = pom()
     for site in SITES:
-        complete_info.update({site: drv.info_get(site, SITES[site])})
-    drv.quit()
+        complete_info.update({site: info_get(site)})
     return complete_info
 
 def alert_wm(info):
@@ -49,49 +67,10 @@ def alert_compose(info):
 def output(stats, timestamp):
     header = 'COVID-19 ' + timestamp + ' v' + __version__
     cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\''
-    if __debug__:
+    if not __debug__:
         logger.debug(header + '\n' + stats)
     else:
         os.system(cmd)
-
-class pom(SessionDriver):
-
-    def __init__(self):
-        super().__init__()
-        # if in debug mode, make sure new session is created first
-        self.launch(not __debug__) # will attempt to connect to existing sesssion if debug mode
-        self.refresh() # do not remove, required if connected to existing session
-
-    def __enter__(self):
-        pass
-
-    def info_get(self, alias, url):
-        self.get(url)
-        if alias == 'wm':
-            return self.__info_get_wm__()
-        if alias == 'jh':
-            return self.__info_get_jh__()
-
-    def __info_get_wm__(self):
-        elems = self.find_elements_by_xpath('//div[@class=\'maincounter-number\']/span')
-        cases = elems[0].text
-        deaths = elems[1].text
-        last_updated = self.find_element_by_xpath('//div[@style=\'font-size:13px; color:#999; text-align:center\']').text
-        critical_abs = self.find_elements_by_class_name('number-table')[1].text
-        critical_percent = self.find_element_by_xpath('//div[@style=\'float:right; text-align:center\']/strong').text
-        critical = critical_abs + '(' + critical_percent + '%)'
-        return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated.split(': ')[1], }
-
-    def __info_get_jh__(self):
-        return {'TO BE DEVELOPED'}
-
-    def quit(self):
-        if not __debug__:
-            super().quit()
-
-    def __exit__(self, exception_type, exception_value, traceback):
-        if not __debug__:
-            self.quit()
 
 def main():
 
@@ -101,7 +80,6 @@ def main():
 
     prev = ''
 
-    # init_browser()
 
     while True:
         info = info_collect(SITES)
@@ -109,7 +87,7 @@ def main():
         if  prev < last:
             output(alert_compose(info), last)
         prev = last
-        if __debug__:
+        if not __debug__:
             logger.debug('Exiting due to debug mode.')
             break
         time.sleep(SLEEP)
