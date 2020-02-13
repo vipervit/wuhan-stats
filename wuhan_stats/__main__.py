@@ -1,16 +1,21 @@
 import os
+import sys
 import time
 import logging
 
 from bs4 import BeautifulSoup
 import requests
 
-from . import __version__
+import plyer
 
-logger = logging.getLogger(__name__)
+from . import __version__, logger
+
+if not __debug__:
+    logger.setLevel(logging.DEBUG)
 
 SLEEP = 3600
 SLEEP_MIN = 900
+WIN_NOTIFICATION_TIMEOUT = 3600
 
 SITES = { \
     # 'jh': 'https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6',\
@@ -56,7 +61,6 @@ def alert_wm(info):
         txt += i + ': ' + info[i] + '\n'
     txt = list(txt)
     txt = ''.join(txt)
-    txt += 'v' + __version__
     return txt
 
 def alert_compose(info):
@@ -64,13 +68,25 @@ def alert_compose(info):
         if site == 'wm':
             return alert_wm(info[site])
 
+def get_platform():
+    platform = sys.platform
+    if platform == 'darwin':
+        return 'Mac'
+    elif platform == 'win32':
+        return 'Win'
+    else:
+        raise NotImplementedError('Not desigend for this platform: ' + platform)
+
 def output(stats, timestamp):
     header = 'COVID-19 ' + timestamp + ' v' + __version__
-    cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\''
-    if not __debug__:
+    if not __debug__: # running only once, not in loop
         logger.debug(header + '\n' + stats)
-    else:
-        os.system(cmd)
+    else: # looped execution
+        platform = get_platform()
+        if platform == 'Mac':
+            os.system('osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\'')
+        elif platform == 'Win':
+            plyer.notification.notify(header, stats, timeout=WIN_NOTIFICATION_TIMEOUT)
 
 def main():
 
