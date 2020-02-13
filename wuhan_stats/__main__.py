@@ -24,6 +24,7 @@ def info_get_wm():
     tmp =soup.title.string.split(' ')
     cases = tmp[3]
     deaths = tmp[6]
+    time = soup.text.split('Last updated: ')[1].split('GMT')[0]
     last_updated = soup.text.split('Last updated: ')[1].split('GMT')[0] + ' GMT'
     critical = soup.text.split('Serious or Critical')[0].split('Mild Condition')[1].replace(' ', '')
     return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated }
@@ -66,7 +67,7 @@ def alert_compose(info):
 def output(stats, timestamp):
     header = 'COVID-19 ' + timestamp + ' v' + __version__
     cmd = 'osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\''
-    if __debug__:
+    if not __debug__:
         logger.debug(header + '\n' + stats)
     else:
         os.system(cmd)
