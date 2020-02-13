@@ -1,3 +1,2 @@
-selenium
-viperdriver
-viperlib
+beautifulsoup4
+requests

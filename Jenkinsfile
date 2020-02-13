@@ -6,22 +6,20 @@ pipeline {
 
        stage('BUILD') {
         steps {
-            sh '. $python_prog/dev/bin/activate'
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
         }
        }
 
-       stage('UPLOAD') {
+       stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'python3 -m twine upload -u vipervit dist/*'
+           sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan_stats -r requirements.txt'
         }
        }
 
        stage('DEPLOY') {
         steps {
-            sh '. $python_prog/prod/bin/activate'
-            sh 'pip install --upgrade wuhan-stats'
+            sh 'pip install --upgrade wuhan_stats'
         }
        }
 
