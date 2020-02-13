@@ -13,7 +13,7 @@ pipeline {
 
        stage('UPLOAD - TESTPYPI') {
         steps {
-           sh 'pip install --upgrade --index-url https://test.pypi.org/simple/ wuhan_stats'
+           sh 'python3 -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
