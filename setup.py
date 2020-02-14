@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from wuhan_stats import __version__
 
 with open("README.md", "r") as f:
-    long_description = fh.read()
+    long_description = f.read()
 
 setup(
     name = 'wuhan_stats',
