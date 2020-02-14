@@ -18,7 +18,8 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
-        "Operating System :: Windows 10 :: MacOS X",
+        "Operating System :: Microsoft :: Windows :: Windows 10",
+        "Operating System :: MacOS :: MacOS X",
         "Development Status :: 4 - Beta",
         "Intended Audience :: End Users/Desktop"
     ]
