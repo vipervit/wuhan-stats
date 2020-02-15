@@ -22,5 +22,10 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Development Status :: 4 - Beta",
         "Intended Audience :: End Users/Desktop"
+    ],
+    install_requires=[
+   'beautifulsoup4',
+   'plyer',
+   'requests'
     ]
 )
