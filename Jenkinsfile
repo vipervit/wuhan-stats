@@ -13,7 +13,7 @@ pipeline {
 
        stage('UPLOAD - TEST') {
         steps {
-           sh 'python3 -m twine upload -u vipervit --index-url https://test.pypi.org/simple/ dist/*'
+           sh 'python3 -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
 
