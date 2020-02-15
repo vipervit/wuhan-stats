@@ -1,5 +1,5 @@
 # wuhan_stats
-Simple alert for updates of Wuhan virus statistics.
+Simple alert on updates of Wuhan virus statistics.
 
 Generates alert using the Notifications feature on Mac or Windows as soon as new statistics are available at https://www.worldometers.info/coronavirus/  
 
