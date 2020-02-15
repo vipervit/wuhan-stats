@@ -3,7 +3,7 @@ Simple alert on updates of Wuhan virus statistics.
 
 Generates alert using the Notifications feature on Mac or Windows as soon as new statistics are available at https://www.worldometers.info/coronavirus/  
 
-![Alert sample](snapshot.jpeg)
+![Alert sample](https://github.com/vipervit/wuhan_stats/blob/master/snapshot.jpeg)
 
 ## Dependencies:
 - requests
