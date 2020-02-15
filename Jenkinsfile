@@ -11,15 +11,15 @@ pipeline {
         }
        }
 
-       stage('UPLOAD - TEST') {
+       stage('UPLOAD') {
         steps {
-           sh 'python3 -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
+           sh 'python3 -m twine upload -u vipervit dist/*'
         }
        }
 
-       stage('DEPLOY - TEST') {
+       stage('DEPLOY') {
         steps {
-            sh 'pip install --upgrade wuhan_stats --index-url https://test.pypi.org/simple/'
+            sh 'pip install --upgrade wuhan_stats'
         }
        }
 
