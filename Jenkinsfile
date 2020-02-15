@@ -17,12 +17,6 @@ pipeline {
         }
        }
 
-       stage('DEPLOY - TEST') {
-        steps {
-            sh 'pip install --upgrade wuhan_stats --index-url https://test.pypi.org/simple/'
-        }
-       }
-
     }
 
 }
