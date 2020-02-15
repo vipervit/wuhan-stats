@@ -22,7 +22,8 @@ Generates alert using the Notifications feature on Mac or Windows as soon as new
 ## Notes
 Polling period is 1 hour (hardcoded).
 
-Alert is generated only if there is a new timestamp on the source site in 'Last updated' field.
+Alert is generated only when the script is launched and then only if it finds (while checking hourly) the 'Last updated' field on the source site updated.
 
 For Windows, the notification's timeout is 1 hour.
+
 For Mac, make sure desired notification style is choosen for Script Editor in System Preferences->Notifications.  
