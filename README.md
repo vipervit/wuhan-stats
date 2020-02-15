@@ -14,7 +14,9 @@ Generates alert using the Notifications feature on Mac or Windows as soon as new
 *'pip install wuhan_stats'*
 
 ## To run:
+
 *'nohup python -m wuhan-stats &'* (Mac)
+
 *'pythonw -m wuhan_stats'*        (Windows)
 
 ## Notes
