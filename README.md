@@ -7,6 +7,7 @@ Generates alert using the Notifications feature on Mac or Windows as soon as new
 
 ## Downloads
 Mac: https://drive.google.com/file/d/1Kne4mmtAliNTgchhUsuLhaFdmEnIxkYZ/view?usp=sharing
+
 Win: TBD
 
 ## Dependencies:
