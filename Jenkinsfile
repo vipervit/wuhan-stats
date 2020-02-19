@@ -8,6 +8,7 @@ pipeline {
         steps {
             sh 'rm -r -f dist'
             sh 'python3 setup.py sdist'
+            sh 'pyinstaller --onefile --windowed wuhanstats.py'
         }
        }
 
@@ -16,6 +17,7 @@ pipeline {
            sh 'python3 -m twine upload -u vipervit --repository-url https://test.pypi.org/legacy/ dist/*'
         }
        }
+
 
     }
 
