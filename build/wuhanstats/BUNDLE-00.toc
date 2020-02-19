@@ -1,0 +1,3 @@
+([('wuhanstats',
+   '/Users/Vitaly/Documents/PROG/python/dev/sepy/wuhan_stats/dist/wuhanstats',
+   'EXECUTABLE')],)
