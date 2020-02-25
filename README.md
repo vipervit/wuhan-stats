@@ -7,7 +7,9 @@ Generates alert using the Notifications feature on Mac, Linux or Windows as soon
 
 ## Downloads
 Mac: https://drive.google.com/file/d/1Kne4mmtAliNTgchhUsuLhaFdmEnIxkYZ/view?usp=sharing
+
 Linux: https://drive.google.com/open?id=1dw4UzRQLQtbYGfwfQHoqOhRr9XfWZFxJ
+
 Win: TBD
 
 ## Dependencies:
