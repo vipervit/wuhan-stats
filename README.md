@@ -1,13 +1,13 @@
 # wuhan_stats
 Simple alert on updates of Wuhan virus statistics.
 
-Generates alert using the Notifications feature on Mac or Windows as soon as new statistics are available at https://www.worldometers.info/coronavirus/  
+Generates alert using the Notifications feature on Mac, Linux or Windows as soon as new statistics are available at https://www.worldometers.info/coronavirus/  
 
 ![Alert sample](https://github.com/vipervit/wuhan_stats/raw/master/snapshot.jpeg)
 
 ## Downloads
 Mac: https://drive.google.com/file/d/1Kne4mmtAliNTgchhUsuLhaFdmEnIxkYZ/view?usp=sharing
-
+Linux: https://drive.google.com/open?id=1dw4UzRQLQtbYGfwfQHoqOhRr9XfWZFxJ
 Win: TBD
 
 ## Dependencies:
