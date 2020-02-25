@@ -74,8 +74,10 @@ def get_platform():
         return 'Mac'
     elif platform == 'win32':
         return 'Win'
+    elif platform == 'linux':
+        return 'Linux'
     else:
-        raise NotImplementedError('Not desigend for this platform: ' + platform)
+        raise NotImplementedError('Not designed for this platform: ' + platform)
 
 def output(stats, timestamp):
     header = 'COVID-19 ' + timestamp + ' v' + __version__
@@ -87,6 +89,9 @@ def output(stats, timestamp):
             os.system('osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\'')
         elif platform == 'Win':
             plyer.notification.notify(header, stats, timeout=WIN_NOTIFICATION_TIMEOUT)
+        elif platform == 'Linux':
+            os.system('notify-send \"' + header + '\" \"' + stats + '\"')
+
 
 def main():
 
