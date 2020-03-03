@@ -27,12 +27,14 @@ def info_get_wm():
     r = requests.get(SITES['wm'])
     soup = BeautifulSoup(r.text, features="html.parser")
     tmp =soup.title.string.split(' ')
-    cases = tmp[3]
+    total = tmp[3]
     deaths = tmp[6]
-    time = soup.text.split('Last updated: ')[1].split('GMT')[0]
     last_updated = soup.text.split('Last updated: ')[1].split('GMT')[0] + ' GMT'
+    active = str(soup.find_all('div', class_='number-table-main')).split('>')[1].split('<')[0]
     critical = soup.text.split('Serious or Critical')[0].split('Mild Condition')[1].replace(' ', '')
-    return {'Cases': cases, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated }
+    critical = ' ('.join(critical.split('('))
+    new = str(soup.find('tr', class_='total_row')).split(';">')[1].split('<')[0]
+    return {'Cases Total': total, 'Cases New': new, 'Cases Active': active, 'Deaths': deaths, 'Critical': critical, 'As of': last_updated }
 
 # ---------- Johns Hopkins CSSE
 def info_get_jh():
@@ -51,17 +53,13 @@ def info_collect(sites):
     return complete_info
 
 def alert_wm(info):
-    txt = ''
-    info.pop('As of')
     i_deaths = int(info['Deaths'].replace(',',''))
-    i_cases = int(info['Cases'].replace(',',''))
-    rate = round( 100 * i_deaths / i_cases, 2)
-    info['Deaths'] += '(' + str(rate) + '%)'
-    for i in info:
-        txt += i + ': ' + info[i] + '\n'
-    txt = list(txt)
-    txt = ''.join(txt)
-    return txt
+    i_cases_total = int(info['Cases Total'].replace(',',''))
+    rate = round( 100 * i_deaths / i_cases_total, 2)
+    ln1 = 'Cases: ' + info['Cases Active']  + ' (' + info['Cases Total'] + ')  +' + info['Cases New'] + '\n'
+    ln2 = 'Deaths: ' + info['Deaths'] + ' (' + str(rate) + '%)' + '\n'
+    ln3 = 'Critical: ' + info['Critical']
+    return ln1 + ln2 + ln3
 
 def alert_compose(info):
     for site in info:
@@ -81,16 +79,13 @@ def get_platform():
 
 def output(stats, timestamp):
     header = 'COVID-19 ' + timestamp + ' v' + __version__
-    if not __debug__: # running only once, not in loop
-        logger.debug(header + '\n' + stats)
-    else: # looped execution
-        platform = get_platform()
-        if platform == 'Mac':
-            os.system('osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\'')
-        elif platform == 'Win':
-            plyer.notification.notify(header, stats, timeout=WIN_NOTIFICATION_TIMEOUT)
-        elif platform == 'Linux':
-            os.system('notify-send \"' + header + '\" \"' + stats + '\"')
+    platform = get_platform()
+    if platform == 'Mac':
+        os.system('osascript -e \'display notification \"' + stats + '\" with title \"' + header + '\"\'')
+    elif platform == 'Win':
+        plyer.notification.notify(header, stats, timeout=WIN_NOTIFICATION_TIMEOUT)
+    elif platform == 'Linux':
+        os.system('notify-send \"' + header + '\" \"' + stats + '\"')
 
 
 def main():
@@ -110,7 +105,7 @@ def main():
         prev = last
         if not __debug__:
             logger.debug('Exiting due to debug mode.')
-            break
+            sys.exit()
         time.sleep(SLEEP)
 
 if __name__ == '__main__':
