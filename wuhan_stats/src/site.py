@@ -87,7 +87,7 @@ class site:
         def __worldometer_get_latest__(self):
             parent = self._soup.find('div', id='innercontent')
             alert_img = '/img/alert.png'
-            self._latest_update_html = str(parent.contents[6]).replace(alert_img, SITES[self._site]['home'] + alert_img)
+            self._latest_update_html = str(parent.contents[9]).replace(alert_img, SITES[self._site]['home'] + alert_img)
 
 
         def __make__(self, soup, timestamp):
@@ -101,6 +101,7 @@ class site:
             from email.mime.text import MIMEText
             from email.mime.multipart import MIMEMultipart
             sender_email = "vitolg1@gmail.com"
+            receiver_email = "vitolg1@gmail.com"
             receiver_email = "vitolg1@gmail.com"
             password = keyring.get_password('gmail', 'vitolg1')
             message = MIMEMultipart("alternative")

@@ -2,30 +2,30 @@ import os
 import sys
 import time
 import logging
+import getopt
 
-from wuhan_stats import __version__, logger, SLEEP, SLEEP_MIN
-from wuhan_stats.src.site import site as site
+from tkinter import *
 
-if not __debug__:
-    logger.setLevel(logging.DEBUG)
+from wuhan_stats import __version__, logger
+from wuhan_stats.src.app import Application
 
-
-def main():
-    if SLEEP < SLEEP_MIN: # to restrict polling period in order not to abuse the sources
-        logger.data('Polling period may not be less than ' + SLEEP_MIN + ' min.')
-        raise SystemExit
-    prev = ''
-    while True:
-        with site('Worldometer') as worldometer:
-            worldometer.get()
-            if prev < worldometer.last_updated:
-                worldometer.desktop.send()
-                worldometer.email.send()
-                prev = worldometer.last_updated
-            if not __debug__:
-                logger.debug('Exiting due to debug mode.')
-                sys.exit()
-            time.sleep(SLEEP)
+logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
-    main()
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'd', [])
+    except getopt.GetoptError as err:
+        logger.error(err)
+        logger.info(__doc__)
+        sys.exit(2)
+
+    for opt, args in opts:
+        if opt == '-d':
+            logger.setLevel(logging.DEBUG)
+
+    root = Tk()
+    root.title('COVID-19')
+    app = Application(master=root)
+    app.mainloop()
+    root.destroy()
