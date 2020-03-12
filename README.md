@@ -5,13 +5,6 @@ Generates alert using the Notifications feature on Mac, Linux or Windows as soon
 
 ![Alert sample](https://github.com/vipervit/wuhan_stats/raw/master/snapshot.jpeg)
 
-## Downloads
-Mac: https://anonfile.com/TcRdo8d3o5/wuhanstats.app_zip
-
-Linux: https://anonfile.com/fbTfodd2o4/wuhanstats
-
-Win: TBD
-
 ## Dependencies:
 - requests
 - BeautifulSoup
