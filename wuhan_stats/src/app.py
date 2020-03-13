@@ -22,31 +22,39 @@ class Application(Frame):
                 logger.debug('Exiting due to debug mode.')
                 sys.exit()
 
-    def __set_interval__(self):
-        reading = int(self.PollingInterval.get())
-        self._interval = reading * 3600000
+    def __interval_set__(self):
+        self._interval = int(self.PollingInterval.get()) * 3600000
 
-    def __run_counter__(self):
-        if self.Start["text"] == "Stop":
-            self.Counter["text"] = str(self._elapsed)
+    def __counter_set__(self):
+        self._elapsed = int(self.PollingInterval.get()) * 3600
+
+    def __counter_update__(self):
+        reset = False
+        if self._elapsed > 0 and self.Start["text"] != "Start":
             self._elapsed -= 1
-            self.master.after(1000, self.__run_counter__)
+        else:
+            reset = True
+        if reset:
+            self._elapsed = 0
+            return
+        self.Counter["text"] = self._elapsed
+        self.master.after(1000, self.__counter_update__)
 
     def run(self):
+        self.__counter_update__()
         if self.Start["text"] == "Stop":
-            self._elapsed = int(self.PollingInterval.get()) * 3600
-            self.__run_counter__()
             self.execute()
             self.master.after(self._interval, self.run)
 
     def startstop_change_title(self):
         if self.Start["text"] == "Start":
             self.Start["text"] = "Stop"
+            self.__interval_set__()
+            self.__counter_set__()
+            self.run()
         else:
             self.Start["text"] = "Start"
             self.Counter["text"] = "0"
-        self.__set_interval__()
-        self.run()
 
     def createWidgets(self):
 
