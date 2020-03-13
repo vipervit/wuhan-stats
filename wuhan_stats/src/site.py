@@ -87,7 +87,11 @@ class site:
         def __worldometer_get_latest__(self):
             parent = self._soup.find('div', id='innercontent')
             alert_img = '/img/alert.png'
-            self._latest_update_html = str(parent.contents[5]).replace(alert_img, SITES[self._site]['home'] + alert_img)
+            idx = None
+            for i in range(1,8):
+                if 'ul' in parent.contents[i].text:
+                    idx = i
+            self._latest_update_html = str(parent.contents[idx]).replace(alert_img, SITES[self._site]['home'] + alert_img)
 
 
         def __make__(self, soup, timestamp):
