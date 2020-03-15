@@ -5,6 +5,7 @@ from tkinter import *
 
 from wuhan_stats.src.site import site as site
 from wuhan_stats import logger
+from wuhan_stats.src.utils import secs2time
 
 class Application(Frame):
 
@@ -45,12 +46,12 @@ class Application(Frame):
     def __counter_start_value__(self, debug=__debug__):
         return int(self._period / 1000)
 
-    def __counter_display_set__(self):
-        self.Counter["text"] = self._elapsed
+    def __counter_display_update__(self):
+        self.Counter["text"] = secs2time(self._elapsed)
 
     def __counter_reset__(self):
         self._elapsed = self.__counter_start_value__()
-        self.__counter_display_set__()
+        self.__counter_display_update__()
 
     def __counter_run__(self):
         if self._running:
@@ -58,7 +59,7 @@ class Application(Frame):
                 self._elapsed -= 1
             else:
                 self.__counter_reset__()
-            self.Counter["text"] = self._elapsed
+            self.__counter_display_update__()
             self.master.after(1000, self.__counter_run__) # 1000 = update every second
 
     def run(self):
@@ -84,8 +85,8 @@ class Application(Frame):
         Label(text="Polling(hrs):").pack(side=LEFT)
         self.PollingInterval = Spinbox(from_=1, to=24, increment=1, width=5, command=self.__polling_period_reset__)
         self.PollingInterval.pack(side=LEFT)
-        Label(text="Next in sec:").pack(side=LEFT)
-        self.Counter = Button(text="0", width=4)
+        Label(text="Next in:").pack(side=LEFT)
+        self.Counter = Button(text="0", width=10)
         self.Counter.pack(side=LEFT)
         self.Start = Button(text="Start", command=self.startstop_change_title)
         self.Start.pack(side=LEFT)

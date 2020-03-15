@@ -8,17 +8,7 @@ import plyer
 import smtplib
 
 from wuhan_stats import __version__, SITES
-
-def get_platform():
-    platform = sys.platform
-    if platform == 'darwin':
-        return 'Mac'
-    elif platform == 'win32':
-        return 'Win'
-    elif platform == 'linux':
-        return 'Linux'
-    else:
-        raise NotImplementedError('Not designed for this platform: ' + platform)
+from wuhan_stats.src.utils import get_platform, str_today
 
 class site:
 
@@ -85,15 +75,10 @@ class site:
             self._site = site
 
         def __worldometer_get_latest__(self):
-            parent = self._soup.find('div', id='innercontent')
             alert_img = '/img/alert.png'
-            idx = 0
-            while str(parent.contents[idx]).find('<h4>') == -1:
-                idx += 1
-                if 'ul' in parent.contents[idx].text:
-                    break
-            self._latest_update_html = str(parent.contents[idx+1]).replace(alert_img, SITES[self._site]['home'] + alert_img)
-
+            self._latest_update_html = str(self._soup).split('<div id=\"newsdate' + str_today() + '\">')[1]
+            self._latest_update_html = self._latest_update_html.split('button')[0]
+            self._latest_update_html = self._latest_update_html.replace(alert_img, SITES[self._site]['home'] + alert_img)
 
         def __make__(self, soup, timestamp):
             self._timestamp = timestamp
