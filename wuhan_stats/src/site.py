@@ -75,7 +75,7 @@ class site:
             self._site = site
 
         def __worldometer_get_latest__(self):
-            alert_img = '/img/alert.png'
+            alert_img = '/images/alert.png'
             self._latest_update_html = str(self._soup).split('<div id=\"newsdate' + str_today() + '\">')[1]
             self._latest_update_html = self._latest_update_html.split('button')[0]
             self._latest_update_html = self._latest_update_html.replace(alert_img, SITES[self._site]['home'] + alert_img)
