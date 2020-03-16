@@ -1,9 +1,20 @@
 # wuhan_stats
-Simple alert on updates of Wuhan virus statistics.
+Email and desktop alert on updates of COVID-19 pandemic statistics.
 
-Generates alert using the Notifications feature on Mac, Linux or Windows as soon as new statistics are available at https://www.worldometers.info/coronavirus/  
+Generates alert using the Notifications feature on Mac, Linux or Windows as well as via email for COVID-19 latest statistics as they become available at https://www.worldometers.info/coronavirus/
 
-![Alert sample](https://github.com/vipervit/wuhan_stats/raw/master/snapshot.jpeg)
+Email alert can be swtiched off or on and provides deeper coverage. 
+
+The app has a simple interface allowing to set frequency of the alerts and pause them. It also diplays a countdown timer. 
+
+## Snapshots
+![Control](https://github.com/vipervit/wuhan_stats/blob/master/img/control.jpeg)
+
+
+![Alert](https://github.com/vipervit/wuhan_stats/blob/master/img/alert.jpg)
+
+
+![Email](https://github.com/vipervit/wuhan_stats/blob/master/img/email.jpeg)
 
 ## Dependencies:
 - requests
@@ -13,17 +24,15 @@ Generates alert using the Notifications feature on Mac, Linux or Windows as soon
 ## To install:
 *'pip install wuhan_stats'*
 
+## Email
+The app uses smptlib and needs to have access to an email account.
+The password for the account is retrieved from the keychain on the local machine using popular Python 'keyring' package.
+All email attributes are provided as CLI keys.
+For example, let's say 'gmail' account in the computer's keychain references Gmail user account. The app will retrieve the password for the account based on command line parameters '-s gmail' and '-u <Gmail user id>'.
+
+
 ## To run:
-
-*'nohup python -m wuhan-stats &'* (Mac)
-
-*'pythonw -m wuhan_stats'*        (Windows)
+*'python -m wuhan-stats -t (insert receiver email) -f (insert sender email) -s (insert keyring service name) -u (insert keyring uid)'*
 
 ## Notes
-Polling period is 1 hour (hardcoded).
-
-Alert is generated only when the script is launched and then only if it finds (while checking hourly) the 'Last updated' field on the source site updated.
-
-For Windows, the notification's timeout is 1 hour.
-
 For Mac, make sure desired notification style is choosen for Script Editor in System Preferences->Notifications.  
