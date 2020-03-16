@@ -14,7 +14,7 @@ class Application(Frame):
             logger.debug(self._elapsed)
         else:
             prev = ''
-            with site('Worldometer') as worldometer:
+            with site('Worldometer') as worldometer: # more sites may added in the future
                 worldometer.get()
                 if prev < worldometer.last_updated:
                     worldometer.desktop.send()

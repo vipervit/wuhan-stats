@@ -7,7 +7,7 @@ import requests
 import plyer
 import smtplib
 
-from wuhan_stats import __version__, SITES, WIN_NOTIFICATION_TIMEOUT
+from wuhan_stats import __version__, SITES, WIN_NOTIFICATION_TIMEOUT, EMAIL_ATTRIBS
 from wuhan_stats.src.utils import get_platform, str_today
 
 class site:
@@ -90,10 +90,9 @@ class site:
             import smtplib, ssl
             from email.mime.text import MIMEText
             from email.mime.multipart import MIMEMultipart
-            sender_email = "vitolg1@gmail.com"
-            receiver_email = "vitolg1@gmail.com"
-            receiver_email = "vitolg1@gmail.com"
-            password = keyring.get_password('gmail', 'vitolg1')
+            sender_email = EMAIL_ATTRIBS.from_
+            receiver_email = EMAIL_ATTRIBS.to
+            password = keyring.get_password(EMAIL_ATTRIBS.keyring_service, EMAIL_ATTRIBS.keyring_uid)
             message = MIMEMultipart("alternative")
             message["Subject"] = "COVID-19 latest " + self._timestamp
             message["From"] = sender_email
