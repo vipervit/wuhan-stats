@@ -25,7 +25,7 @@ def get_platform():
         raise NotImplementedError('Not designed for this platform: ' + platform)
 
 def str_today():
-    d = [str(time.gmtime().tm_year), str(time.gmtime().tm_mon), str(time.gmtime().tm_mday)]
+    d = [str(time.localtime().tm_year), str(time.localtime().tm_mon), str(time.localtime().tm_mday)]
     for i in range(len(d)):
         if len(d[i]) < 2:
             d[i] = '0' + d[i]
