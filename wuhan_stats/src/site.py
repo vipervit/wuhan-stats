@@ -7,7 +7,7 @@ import requests
 import plyer
 import smtplib
 
-from wuhan_stats import __version__, SITES
+from wuhan_stats import __version__, SITES, WIN_NOTIFICATION_TIMEOUT
 from wuhan_stats.src.utils import get_platform, str_today
 
 class site:
