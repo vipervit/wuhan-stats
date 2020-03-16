@@ -14,7 +14,6 @@ pipeline {
        stage('UPLOAD') {
         steps {
            sh 'python3 -m twine upload -u vipervit dist/wuhan_stats*'
-           sh 'pyinstaller --onefile --windowed wuhanstats.py'
         }
        }
 
