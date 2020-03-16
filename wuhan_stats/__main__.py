@@ -15,7 +15,7 @@ if __name__ == '__main__':
         logger.setLevel(logging.DEBUG)
 
     root = Tk()
-    root.title('COVID-19')
+    root.title('COVID-19   v.' + __version__)
     app = Application(master=root)
     app.mainloop()
     root.destroy()

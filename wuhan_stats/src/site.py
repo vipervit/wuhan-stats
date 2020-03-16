@@ -60,7 +60,7 @@ class site:
             self._text =  ln1 + ln2 + ln3
 
         def send(self):
-            header = 'COVID-19 ' + self.timestamp + ' v' + __version__
+            header = 'COVID-19 ' + self.timestamp
             platform = get_platform()
             if platform == 'Mac':
                 os.system('osascript -e \'display notification \"' + self._text + '\" with title \"' + header + '\"\'')

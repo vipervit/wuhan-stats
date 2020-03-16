@@ -62,19 +62,19 @@ class Application(Frame):
             self.__counter_display_update__()
             self.master.after(1000, self.__counter_run__) # 1000 = update every second
 
-    def run(self):
+    def __run__(self):
         if self._running:
             self.execute()
-            self.master.after(self._period, self.run)
+            self.master.after(self._period, self.__run__)
 
-    def startstop_change_title(self):
-        if not self._running:
+    def __startstop__(self):
+        if not self._running:  # start
             self._running = True
             self.Start["text"] = "Stop"
-            self.run()
+            self.__run__()
             self.__counter_run__()
         else:
-            self._running = False
+            self._running = False  # stop
             self.Start["text"] = "Start"
             self.__counter_reset__()
             self.__polling_period_reset__()
@@ -88,7 +88,7 @@ class Application(Frame):
         Label(text="Next in:").pack(side=LEFT)
         self.Counter = Button(text="0", width=10)
         self.Counter.pack(side=LEFT)
-        self.Start = Button(text="Start", command=self.startstop_change_title)
+        self.Start = Button(text="Start", command=self.__startstop__)
         self.Start.pack(side=LEFT)
         self.QUIT = Button(text="QUIT", command=self.quit, fg="red").pack(side=RIGHT)
         self.__polling_period_reset__()
