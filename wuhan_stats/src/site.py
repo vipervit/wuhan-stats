@@ -40,24 +40,29 @@ class site:
                 self.__compose__()
 
         def __worldometer_parse_stats__(self):
-                tmp = self._soup.title.string.split(' ')
-                total = tmp[3]
-                deaths = tmp[6]
-                active = str(self._soup.find_all('div', class_='number-table-main')).split('>')[1].split('<')[0]
-                critical = self._soup.text.split('Serious or Critical')[0].split('Mild Condition')[1].replace(' ', '')
-                critical = ' ('.join(critical.split('('))
-                new = str(self._soup.find('tr', class_='total_row')).split(';">')[1].split('<')[0]
-                self._stats = {'Cases Total': total, 'Cases New': new, 'Cases Active': active, 'Deaths': deaths, 'Critical': critical }
+            data = self._soup.find('tr', class_='total_row').text.split('\n')
+            total = data[2]
+            new = data[3]
+            deaths = data[4]
+            deaths_new = data[5]
+            active = data[7]
+            critical = data[8]
+            self._stats = {'Cases Total': total, 'Cases New': new, 'Cases Active': active, 'Deaths': deaths, 'Deaths New': deaths_new, 'Critical': critical }
 
         def __compose__(self):
             info = self._stats
             i_deaths = int(info['Deaths'].replace(',',''))
             i_cases_total = int(info['Cases Total'].replace(',',''))
-            rate = round( 100 * i_deaths / i_cases_total, 2)
-            ln1 = 'Cases: ' + info['Cases Active']  + ' (' + info['Cases Total'] + ')  +' + info['Cases New'] + '\n'
-            ln2 = 'Deaths: ' + info['Deaths'] + ' (' + str(rate) + '%)' + '\n'
-            ln3 = 'Critical: ' + info['Critical']
+            rate_deaths = round( 100 * i_deaths / i_cases_total, 2)
+            i_critical = int(info['Critical'].replace(',',''))
+            rate_critical = round( 100 * i_critical / i_cases_total, 2)
+            ln1 = 'Cases: ' + info['Cases Active']  + ' (' + info['Cases Total'] + ') ' + info['Cases New'] + '\n'
+            ln2 = 'Deaths: ' + info['Deaths'] + ' (' + str(rate_deaths) + '%) ' + info['Deaths New'] + '\n'
+            ln3 = 'Critical: ' + info['Critical'] + ' (' + str(rate_critical) + '%) '
             self._text =  ln1 + ln2 + ln3
+
+        def contents(self):
+            return self._text
 
         def send(self):
             header = 'COVID-19 ' + self.timestamp
@@ -80,11 +85,12 @@ class site:
             self._latest_update_html = self._latest_update_html.split('button')[0]
             self._latest_update_html = self._latest_update_html.replace(alert_img, SITES[self._site]['home'] + alert_img)
 
-        def __make__(self, soup, timestamp):
+        def __make__(self, soup, timestamp, brief_stats):
             self._timestamp = timestamp
             self._soup = soup
             if self._site == 'Worldometer':
                 self.__worldometer_get_latest__()
+                self._latest_update_html = brief_stats.upper() + self._latest_update_html
 
         def send(self):
             import smtplib, ssl
@@ -153,4 +159,4 @@ class site:
             self._last_updated =  self.soup.text.split('Last updated: ')[1].split('GMT')[0] + ' GMT'
         self.desktop.timestamp = self.last_updated
         self.desktop.__make__(self._soup)
-        self.email.__make__(self._soup, self.desktop.timestamp)
+        self.email.__make__(self._soup, self.desktop.timestamp, self.desktop.contents())
