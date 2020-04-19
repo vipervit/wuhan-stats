@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 console = logging.StreamHandler()
 logger.addHandler(console)
 
-__version__ = '1.8.1'
+__version__ = '1.9.1'
 
 PERIOD_DEFAULT = 1 # hours
 PERIOD_MIN = 0.25 # hours

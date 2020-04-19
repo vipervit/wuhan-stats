@@ -1,4 +1,4 @@
-import time
+import datetime
 import sys
 
 def secs2time(secs):
@@ -25,8 +25,4 @@ def get_platform():
         raise NotImplementedError('Not designed for this platform: ' + platform)
 
 def str_today():
-    d = [str(time.localtime().tm_year), str(time.localtime().tm_mon), str(time.localtime().tm_mday)]
-    for i in range(len(d)):
-        if len(d[i]) < 2:
-            d[i] = '0' + d[i]
-    return '-'.join(d)
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")

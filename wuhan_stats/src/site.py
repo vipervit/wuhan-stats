@@ -40,14 +40,18 @@ class site:
                 self.__compose__()
 
         def __worldometer_parse_stats__(self):
-            data = self._soup.find('tr', class_='total_row').text.split('\n')
-            total = data[2]
-            new = data[3]
-            deaths = data[4]
-            deaths_new = data[5]
-            active = data[7]
-            critical = data[8]
-            self._stats = {'Cases Total': total, 'Cases New': new, 'Cases Active': active, 'Deaths': deaths, 'Deaths New': deaths_new, 'Critical': critical }
+            # We can total cases and total deaths directly from the title
+            cases_total = str(self._soup.title).split()[3]
+            deaths_total = str(self._soup.title).split()[6]
+            # For some reason using find("tr", class_"total_row_world odd") doesn't work, therefore more trickery is required
+            for tag in self._soup.find("table", id="main_table_countries_today").find("thead").next_sibling.next_sibling:
+                if "World" in str(tag):
+                    data = tag.find_all("td")
+            cases_new = data[2].text
+            deaths_new = data[4].text
+            cases_active = data[6].text
+            cases_critical = data[7].text
+            self._stats = {'Cases Total': cases_total, 'Deaths': deaths_total, 'Cases New': cases_new, 'Cases Active': cases_active,  'Deaths New': deaths_new, 'Critical': cases_critical }
 
         def __compose__(self):
             info = self._stats
@@ -88,9 +92,15 @@ class site:
         def __make__(self, soup, timestamp, brief_stats):
             self._timestamp = timestamp
             self._soup = soup
+            def make_header(text):
+                spacing = ' .... '
+                words = text.split()
+                words.insert(4, spacing)
+                words.insert(9, spacing)
+                return ' '.join(words).upper()
             if self._site == 'Worldometer':
                 self.__worldometer_get_latest__()
-                self._latest_update_html = brief_stats.upper() + self._latest_update_html
+                self._latest_update_html = make_header(brief_stats) + self._latest_update_html
 
         def send(self):
             import smtplib, ssl
